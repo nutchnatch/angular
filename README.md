@@ -25,7 +25,7 @@ ng g c server-element
 #to install bootstrap localy on the project:
 npm install --save bootstrap@3
 
-#activate bootstrap on ºroject
+#activate bootstrap on project
 #add the following to "styles" on angular.json file
 node_modules/bootstrap/dist/css/bootstrap.min.css
 
