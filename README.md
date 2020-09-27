@@ -26,7 +26,7 @@ ng g c server-element
 npm install --save bootstrap@3
 
 #activate bootstrap on project
-#add the following to "styles" on angular.json file
+#add the following to "styles" on angular.json file: 
 node_modules/bootstrap/dist/css/bootstrap.min.css
 
 #to run:
