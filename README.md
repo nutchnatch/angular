@@ -25,6 +25,9 @@ ng new cmp-databinding-assignment
 
 npm install -g @angular/cli
 
+#generate a directive:
+ng generate directive better-highlight
+
 #to generate a component:
 
 ng g c server-element
