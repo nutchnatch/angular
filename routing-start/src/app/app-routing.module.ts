@@ -33,6 +33,8 @@ const appRoute: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(appRoute)
+        //for very old brouser which cannot parse angular routes:
+        // RouterModule.forRoot(appRoute, {useHash: true})
     ],
     exports: [RouterModule]
 })
