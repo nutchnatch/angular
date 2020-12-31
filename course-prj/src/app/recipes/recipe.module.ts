@@ -23,15 +23,6 @@ import { CommonModule } from '@angular/common';
         RouterModule,
         FormsModule,
         ReactiveFormsModule
-
-    ],
-    exports: [
-        RecipesComponent,
-        RecipeListComponent,
-        RecipeDetailComponent,
-        RecipeItemComponent,
-        RecipeStartComponent,
-        RecipeEditComponent
     ]
 })
 export class RecipesModule {
