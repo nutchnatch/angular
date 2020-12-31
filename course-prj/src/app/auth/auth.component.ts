@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { AuthResponseData } from './auth.service';
+import { PlaceHolderDirective } from '../shared/placeholder/placeholder.directive';
 
 @Component({
     selector: 'app-auth',
@@ -15,6 +16,7 @@ export class AuthComponent {
     isLoginMode = true;
     isLoading = false;
     error: string = null;
+    @ViewChild(PlaceHolderDirective, { static: false }) alertHost: PlaceHolderDirective;
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode;
@@ -44,9 +46,24 @@ export class AuthComponent {
         }, errorMessage => {
             console.log(errorMessage);
             this.error = errorMessage;
+            // this.showErrorAlert(errorMessage);
             this.isLoading = false;
         });
 
         form.reset();   
     }
+
+    onHandleError() {
+        this.error = null;
+    }
+
+    // private showErrorAlert(message: string) {
+    //     // const alertCmp = new AlertComponent();
+    //     const alertComponent = this.componenetFactoryResolver.resolveComponentFactory(AlertComponent);
+
+    //     const hostViewContainerRef = this.alertHost.viewContainerRef;
+    //     hostViewContainerRef.clear();
+
+    //     hostViewContainerRef.createComponent(alertComponent);
+    // }
 }
