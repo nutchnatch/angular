@@ -14,6 +14,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         return this.store.select('auth').pipe(
             take(1),
             map(authState => {
+                console.log('interceptor - user: ' + authState.user)
                 return authState.user;
             }),
             exhaustMap(user => {
