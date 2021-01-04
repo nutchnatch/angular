@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp  from '../store/app.reducer';
 import { map } from 'rxjs/operators';
 import * as AuthActions from '../auth/store/auth.actions';
+import * as RecipeActions from '../recipes/store/recipe.action';
 
 @Component ({
     selector: 'app-header',
@@ -19,7 +20,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     constructor(
             private dataStorageService: DataStorageService, 
             private authService: AuthService, 
-            private store: Store<fromApp.AppState>) {}
+            private store: Store<fromApp.AppState>
+        ) {}
 
     ngOnInit() {
         this.userSubs = this.store.select('auth').pipe(
@@ -38,8 +40,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     onFectData() {
-        this.dataStorageService.fetchRecipes()
-            .subscribe();
+        // this.dataStorageService.fetchRecipes()
+        //     .subscribe();
+        this.store.dispatch(new RecipeActions.FetchRecipes());
     }
 
     ngOnDestroy() {
