@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from'@angular/common/http';
-import { RecipeService } from '../recipes/recipe.service'
 import { Recipe } from '../recipes/recipe.model';
 import { map, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -11,12 +10,12 @@ import * as RecipesActions from '../recipes/store/recipe.actions';
 export class DataStorageService {
     constructor(
             private http: HttpClient, 
-            private recipeService: RecipeService, 
             private store: Store<fromApp.AppState>
         ) {}
 
     storeRecipes() {
-        const recipes = this.recipeService.getRecipes();
+        // const recipes = this.recipeService.getRecipes();
+        const recipes = [];
         this.http.put('https://ng-course-recipe-book-e3086-default-rtdb.europe-west1.firebasedatabase.app/recipes.json', recipes)
                 .subscribe(response => {
                     console.log(response);
