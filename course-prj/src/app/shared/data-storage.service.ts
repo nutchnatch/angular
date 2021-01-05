@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from'@angular/common/http';
 import { RecipeService } from '../recipes/recipe.service'
 import { Recipe } from '../recipes/recipe.model';
 import { map, tap } from 'rxjs/operators';
-import { AuthService } from '../auth/auth.service';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as RecipesActions from '../recipes/store/recipe.actions';

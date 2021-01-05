@@ -1,9 +1,11 @@
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import * as RecipesActions from './recipe.actions';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../recipe.model';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../../store/app.reducer';
 
 @Injectable()
 export class RecipeEffects {
@@ -29,8 +31,21 @@ export class RecipeEffects {
         })
     );
 
+    @Effect({dispatch: false})
+    storeRecipes = this.actions$.pipe(
+            ofType(RecipesActions.STORE_RECIPE),
+            withLatestFrom(this.store.select('recipes')),
+            switchMap(([actionData, recipeState]) => {
+                return this.http.put(
+                    'https://ng-course-recipe-book-e3086-default-rtdb.europe-west1.firebasedatabase.app/recipes.json', 
+                    recipeState.recipes
+                );
+            })
+        );
+
     constructor(
             private actions$: Actions,
-            private http: HttpClient
+            private http: HttpClient,
+            private store: Store<fromApp.AppState>
         ) {}
 }
