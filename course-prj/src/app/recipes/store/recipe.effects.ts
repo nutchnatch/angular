@@ -1,5 +1,5 @@
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import * as RecipesActions from './recipe.action';
+import * as RecipesActions from './recipe.actions';
 import { map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../recipe.model';

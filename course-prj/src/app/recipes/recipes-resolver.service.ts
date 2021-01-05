@@ -5,9 +5,10 @@ import { DataStorageService } from '../shared/data-storage.service';
 import { RecipeService } from './recipe.service';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
-import * as RecipesActions from '../recipes/store/recipe.action';
+import * as RecipesActions from './store/recipe.actions';
 import { Actions, ofType } from '@ngrx/effects';
-import { take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RecipesResolverService implements Resolve<Recipe[]> {
@@ -18,10 +19,23 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
             ){};
     
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        this.store.dispatch(new RecipesActions.FetchRecipes());
-        return this.actions$.pipe(
-                ofType(RecipesActions.SET_RECIPES),
-                take(1));
+        return this.store.select('recipes').pipe(
+            take(1),
+            map(recipeState => {
+                return recipeState.recipes;
+            }),
+            switchMap(recipes => {
+                if(recipes.length === 0) {
+                    this.store.dispatch(new RecipesActions.FetchRecipes());
+                    return this.actions$.pipe(
+                        ofType(RecipesActions.SET_RECIPES),
+                        take(1));
+                } else {
+                    return of(recipes);
+                }
+            })
+        )
+        
         // const recipes = this.recipeService.getRecipes();
         // if(recipes.length === 0) {
         //     return this.dataStorageSerice.fetchRecipes();
