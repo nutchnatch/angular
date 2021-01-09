@@ -44,3 +44,6 @@ node_modules/bootstrap/dist/css/bootstrap.min.css
 
 #to run:
 ng serve
+
+#check compilation errors:
+ng lint
