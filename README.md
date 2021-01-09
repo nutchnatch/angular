@@ -24,6 +24,7 @@ ng new cmp-databinding-assignment
 #install a component with npm cli:
 
 npm install -g @angular/cli
+npm install -g @angular/cli@latest
 
 #generate a directive:
 ng generate directive better-highlight
