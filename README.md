@@ -47,3 +47,13 @@ ng serve
 
 #check compilation errors:
 ng lint
+
+#update project
+ng update
+
+#update a specific library
+ng update @angular/core
+
+#add an angular msterial component
+ng generate @angular/material:nav main-nav
+
