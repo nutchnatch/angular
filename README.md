@@ -57,3 +57,5 @@ ng update @angular/core
 #add an angular msterial component
 ng generate @angular/material:nav main-nav
 
+# build commands
+ng build / ng test / ng lint
