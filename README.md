@@ -58,3 +58,15 @@ ng generate @angular/material:nav main-nav
 
 # build commands
 ng build / ng test / ng lint
+
+# Aot (Ahead of time compilation) - build in a few files that can be deplyed, with a small bundle:
+ng build --prod
+
+# deploy static app with firebase: (https://firebase.google.com/docs/cli)
+npm install -g firebase-tools
+# to login:
+firebase login
+# connect this project to firebase:
+firebase init
+# deploy app
+firebase deploy
