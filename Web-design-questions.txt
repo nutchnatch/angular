@@ -1,0 +1,1330 @@
+Web design questions:
+
+. How do you mock your application design, to prototype it?
+	-> wireframes
+
+	Option A:
+
+	<header>   <nav>
+
+		<main>
+
+		<footer>
+------------------------------
+	Option B:
+		<header>
+		<nav>
+
+	<article>
+
+				<aside>
+
+	<section>
+
+		<footer>
+
+
+. How do you start the construction of the application?
+  Usually, we start by defining the css (define colors) (and perhaps html), to create the main structure 
+
+. In html code, usualy, we use a container class:
+	div class="container">
+	do you know why?
+
+. In css there is a technique called FlexBox (and space between). What is it and the purpose of using it?
+
+.cards {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+. We can use pixels to define absolute size in html. How can we set relative sizing? Why is it useful?
+	-> using rem (ex: 3 rem is 3 x the standard size (usualy 16px)). It is useful, when raising or lowering the zoom of the browser (smal, medium, large) 
+
+. Have you used google materials? Which is its purpose?
+
+. How can you make your site adjust size or other properties (color) in different devices?
+	-> use media queries
+
+
+. What is bootstrap and what is it used for?
+  - advantages: quick, looking good; customizable
+  - desadvantage: needs to customize, all looks the same; need knowledge on css and html before using it
+
+. In bootstrap, what is the relation between container, row and col?
+	container is the basic part, in side it we add a rowm with different columns, which spread through the page (there are 12 columns by default, I can use some of them in a single col- ex: col-8 will take 8 columns)
+	- All media queries are already contained in bootstrap:
+	col-lg-10 -> takes 10 col on large screen
+	col-sm-6 --> taakes 6 col in a smal screen
+	col-4 --> 4 columns on extra small screen
+
+. How do you customize the styling within boostrap?
+
+
+
+
+
+ANGULAR
+
+. What is the single page presented by angular?
+	index.html
+
+. How is angular is triggered, how is it kicked off?
+	. CLI injects java scripts in index.html file automatically
+
+. What is app-root?
+
+. What is the first code to be executed?
+	main.ts wich pass AppModule to be boostraped
+
+. What are components, and what is the main advantage to use them?
+
+. What is a selector? What is a templateUrl?
+
+. What is the use of AppModule? What is the decorater used by AppModule? (NgModule)
+	. agregate components in packages. All components must be registered in NgModule
+
+. How can we inject our components, using its selector?
+	adding selector by element, attribute and by class (standards of css)
+
+. How can we define the styling of our component?
+
+
+PROPERTY BINDING:
+
+. What is data binding? 
+	communication between component and template (String interpollation {{ }}, property binding [property]='data')
+
+. What is string interpollation? Podes escrever um exemplo?
+	any expresson that return a string (a methis,  a variable)
+	used more to display something in the page
+
+
+. Prop binding? Podes escrever um exemplo?
+ Each element has a ser of properties in the DOM. those properties can be invoqued with property binding: [disabled]="!allowNewServer" 
+ interacts with the Dom dinamically and change application behavior automatically 
+
+ . What is Event Binding? Podes escrever um exemplo?
+  (click)="onCreateServer()"
+
+ . How to pass data with Event binding?
+ 	(input)="updateServer($event)"  -> target is a property of the event with html part  - will update a proprty in the component
+
+ . What module is responsible for Two way binding?
+    ngModel - done by adding FormsModule to the imports[] array in the AppModule
+    You then also need to add the import from @angular/forms  in the app.module.ts file: import { FormsModule } from '@angular/forms'; 
+   
+   -> do you know other way of event binding?
+    [(ngModel)]="serverName"   (will update automatically the value into servernName, in the component and the other way around)
+
+ . How to listen to a custom event?
+   <app-conckpit (serverCreated)="onUpdate($event)">
+   in the component, we need to create an EventEmitter:
+      @Output() serverCreated = new EventEmitter<{}>();   >> we are passing something out ot the component
+    then do:
+      serverCreated.emit()
+
+ . How to bind custom properties?
+ 	in the component:
+ 	 @Input element: {type: string, name: string}  ---> exposing element, any parent componenet has access to it.
+ 	in the template:
+ 	 <p [element]="serverElement"></p>
+
+ . How to alias custom property?
+ 	Input("srvElement") element : {type: string, name: string}
+ 	Then, in the template, we must use thar alias (srvElement):
+ 		<p [srvElement]="serverElement"></p>
+
+ . How to deactivate view encapsulation and remove shadow dom?
+ 	In the definition of the component, add:
+ 	encapsulation: ViewEncapsulation.None
+
+
+DIRECTIVES:
+ . What are directives?
+ 	Instruction in the DOM - add content of component in the DOM place
+
+ . Give an example of a built-in directive
+   <p *ngIf="!serverCreated">Server was created , server name is {{ serverName }}<p/>
+
+ . How to add an else condition in ngIf?
+ 	add a local reference -> 
+ 	<p *ngIf="!serverCreated; else noServer">Server was created , server name is {{ serverName }}<p/>
+ 	<ng-template #noServer>
+		<p>No server was created</p>
+	</ng-template>
+
+. Do you know the difference between Structure and attribute directives?
+	attribute directives don't add or remove elements, they only change them
+
+. How to style elements dynamically?
+	use ngStyle - expects javascript key (css prop) vlaue pair
+	<p [ngStyle]="{backgroundColor: 'red'}">{{ 'Server' }} with id {{ serverID }}</p>
+
+. How to apply css classes dynamically
+   - use ngClass (with key - css class - value)
+   <p [ngClass]="{online: serverStatus === 'online'}">{{ 'Server' }} with id {{ serverID }}</p>     -> attach only if server is online
+
+ . How to output a list of elements, using a directive?
+   use ngFor
+    <app-server *ngFor="let server of servers"></app-server>
+
+
+ . How to pass elements from html template to other parts of template, or to component?
+   - use Local Reference in Template:
+   <input type="text" class="form-control" #serverNameInput>
+   <button (click)="onAddServer(serverNameInput)">Add server</button>   -> this input element will be send to componenent, and so it can be accedssed and used:
+   onAddServer(nameInput: HtmlInputElement) {
+   	console.log(namwInput.value);
+   }
+
+
+. Other way to access element in the component from template, before calling a method? 
+    - use @ViewChild   -> use the same reference used above: #serverNameInput
+      @ViewChild('serverNameInput') serverNameInput: ElementRef;
+      serverContent = serverNameInput.nativeElement.value;
+
+
+. How can we pass content into componenets with ng-content (between the opening and closing of the selector)? 
+	<app-server-element>
+		code
+	</app-server-element>
+
+	In the destination component template:
+	<div class="panel-body">
+		<ng-content></ngcontent>    ---> works like a hook
+	</body>
+
+
+. Can you describe the component Lifecycle?
+	ngOnChange, ngOnInit, ngDoCheck, ngAfterComponentInit, ngAfterViewChecked, ngOnDestroy
+
+
+. How can we access ng-content with @ContentChild (a content that is placed in other component)?
+	- get access to content which is place in another component, and pass it by ng-content
+	<app-server-element>
+		<input #contentParagraph>   ----> we want to use it in the component where this code is loaded (remember it is using ng-content technique) - in this case, @ViewChild will not work, because it is parte of the content, not the view -> that's why we use here, @ContentChild
+	</app-server-element>
+	@ContentChild('contentParagraph') paragraph: ElementRef;
+
+
+
+SERVICES:
+
+ . Why do we need Services in angular?
+ 	Service is just a normal typescript class
+
+ . How to instantiate a service
+ 	add providers: [AccoutsService] in the component declaration
+ 	inject it in the component constructor
+
+ . What do you understand by hierarchical Injector?
+ 	- Angular can create an instance of a service for a given component and all its child comnponents and they will receive the same instance of the service
+ 	- If we add the service to AppModule, the service instance will be available for the whole app (we can even inject service inside service)
+ 			providers: [AccoutsService]
+ 	- If provide a service in AppComponenet, it will be available in all childs of that component
+ 	- If we have a componenet without childs, the service will be available only in that component, and it will override other instances, if provided in a higher level
+
+ . How can we add a service to another service?
+ 	We need to ensure that the service where we want to inject something, is decorated with @Injectable
+
+ . Explain the concept of Injection in angular.
+   how can we delare it?
+    providers:[loggingService]
+   how many instances of that service will we have? How to use a single instance?
+     add it to AppModule
+   What if we add it only to AppComponent? 
+
+
+ROUTER:
+
+ . How you define navegability of your app?
+     routers
+
+ . Why do we need a Router?
+   Where do we register such routes?
+   	In AppModule, we add const appRouted: Routes = [
+   		{ path: '', component: HomeComponent}  => starting point
+   		{ path: 'users', componenet: UsersComponent} 
+   		}
+   	];
+   	Import RouterModule and add it to imports: [RouterImport.forRoot(appRoutes)]
+   	In AppComponent, add the directive <router-outlet></router-outlet>
+
+  . How do we implement navigation to create links?
+  	- one way, would be to use <a href="/servers">Servers</a>  ---> but this will reload the page and we will lose our state
+  	- use routerLink directive -> <a routerLink="/servers">Servers</a>  -> does not reload the page
+  		routerLink with property binf+ding:
+  			<a [routerLink]="['/users', 'something']">Users</a>  ---> this is an absolute path, so it creates it from the root
+  			<a [routerLink]="['users', 'something']">Users</a>  ---> this is an relative path, just appends the path to the existing current path
+
+ 
+  . How to activate a page (imagine tabs) based on hte routing?  (in this case using css class "active")
+  		Use directive routerLinkActive
+  			<li role="presentation" routerLinkActive="active"><a [routerLink]="['/users', 
+  			'something']">Users</a></li>
+
+  . Empty router (home) is always marked as active (because we are always in a router which contains "/"). How do we fix it to make empty path go to inactive too?
+   		Add a special configuration:
+   			[routerLinkActiveOptions]="{exact: true}"    (takes a property binding, because we pass a java script object there)  --> exact tells angular to set class to active, only when we navigate to whole (not part of it) path 
+
+  . How to trigger navigation programmatically (Abslote path)?
+  	<button (click)="onLoadServers()"></button>
+
+  	Inject router
+  	onLoadServers() {
+  		// absolute path
+  		router.navigate(['/servers']);
+  	}
+
+
+  . How to create rerlative paths in programmatic navigation?
+  	onReload() {
+  		- import Router - router
+  		- import ActivateRouter - route
+  		router.navigate(['servers'])  --> unlike routerLink, navigate method does not know on which routing it currently is. So, we need to add the property relativeTo in navigate method, to tell it the router it is relative to.
+  		router.navigate(['servers'], {relativeTo: route}) 
+  	}
+
+
+  . How to pass parameter to route?
+  	- go to the path definition, and add the property to it:
+  	{ path: 'users/:id/:name', componenet: UsersComponent}   --> 2 parameters: id and name
+  	- load the component with the parameter:
+  		inject ActivateRoute
+  		fetch id:
+  		user = {
+  			id: route.shapshot.params['id'],
+  			name: route.shapshot.params['name']
+  		}
+
+  . How to fetch route parameters realctively?
+  	In the html template:
+  		<a [routerLink]="['/users', 10, 'Anna']"></a> --- static
+  		<a [routerLink]="['/users', user.id, user.name]"></a>  -- dynamic
+  	To make it dynamic, go to component:
+  		route.params (is an observable which allow async tasks - it will automatically update routing, when data changes)
+  		route.params.subscribe(
+  			(params: Params) => {
+  				user.id = params['id'];
+  				user.name = params['name'];
+  			}
+  		)
+
+  . How to pass query paramenters and fragments?
+  	use directive queryParams:
+  		<a 
+  			[routerLink]="['/servers', 5, 'edit']"
+  			[queryParams]="{allowEdit: '1'}"  --> this will add ?allowEdit=1 to the url
+  			fragment="loading"   ---> this will add #loading to the url
+  		>
+  	to add it through the component:
+  	  onLoadServer(id: number) {
+	  	  router.navigate(['/servers'], id, 'edit', {queryParams: {allowEdit: '1'}, fragment: 'loading'})
+	  }
+
+  . How to retrieve paramenters and fragments?
+  	- inject ActivatedRoute - route
+  		route.snapshot.queryParams
+  		oute.snapshot.fragment
+  		- Using reactive way:
+  			route.queryParams.subscribe(
+  				() => {
+
+  				}
+  			)
+
+  . How to setup child routes?
+  	- go to path definition and add children:
+  	{ path: 'users', componenet: UsersComponent, children: [
+  		{ path: ':id', component: ServerComponent},
+  		{ path: ':id/edit', component: EditServerComponent}
+  	]} 
+  	- in ServeComponent template, add the outlet for children:
+  	<router-outlet></router-outlet>   --> add a new rook for child routes
+
+  . When navigating, how to preserve the current information in the router?
+  	we can pass oher property to the navigate method:
+  		router.navigate(['servers'], {relativeTo: route, queryParamsHandler: 'preserve'});
+
+
+  . How to redirect and wildcard routes?
+  	add path for something:
+  		{ path: 'not-found', component: PageNotFound},
+  		{ path: '**', redirectTo: '/not-found', component: PageNotFound}  --> to redirect to "not-found" route when we type any other route we don't know. Make sure to add this path in the end, if not everything will go to not-found route
+
+  . How to outsource route configuration?
+  	- create a route component, where we declare the routes
+  	@NgModule({
+  		imports: [
+  			RouterModule.forRoot(appRoutes);
+  		],
+  		export: [RouterModule]  ---> tells angular to export this conf, so it can be imported i other component
+  	})
+  	- add it to imports in the module
+
+  . Why we use guards?
+  	To protect our routes
+  	It is combersoune to add verification in OnInit in all components, so we can use a technique that matches that accross the app: canActivate, runs a code before a component is loaded
+
+  . How to protect routes with canActivate?
+  	- Component must  imomement CanActivate interface
+  	Override canActivate(route: ActivateRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean method  --> angular executes this code before a route is loaded
+  	- Create a service that runs a login and returns a Promise
+  	- Allows the routing or navigates away:
+  		canActivate(route: ActivateRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  			return authService.isAuthenticated()
+  				.then(
+  					(authenticated: boolean) => {
+  						if(authenticated) {
+  							return true;
+  						} else {
+  							router.navigate(['/']);  -> navigate alway
+  							return false;
+  						}
+  					}
+  				)
+  		}
+  	- go to route definition and add protection to routes:
+  		{ path: 'users', canActivate: [AuthGuard], componenet: UsersComponent }
+  	- add service and AuthGuard to providers in AppModule
+
+  . How to protect child routes woth canActivate?
+  	- In the AuthGuard component, implements CanActivateChilds also
+  	- Implement canActivateChild()  --> call canActivate() inside of it
+  	- In the routing, add canActivateChild in the paths to be protected (it protectes both):
+  		{ path: 'users', canActivateChild: [AuthGuard], componenet: UsersComponent }
+
+  . How to control leaving a route with canDeactivate? To ask user: Do you really want to leave?
+  	- add a new file: can-deactivate-guard
+  	- export interface
+  		export interface CanComponentDeactivate {
+  			canDeactivate(): () => Observable<boolean> | Promise<boolean> | boolean
+  		}
+  		export class CanDeactivateGuard implements CanComponentDeactivate<CanDeactivateGuard> {
+  			canDeactivate(component: CanComponentDeactivate ..., netxState?: RouterStateSnapshot):  Observable<boolean> | Promise<boolean> | boolean {
+  				return component.canDeactivate();
+  			}
+  		}
+  	- add canDeactivate to the path:
+  		{ path: 'users', canActivateChild: [AuthGuard], componenet: UsersComponent, canDeactivate: [CanDeactivateGuard] }
+  	- provide CanDeactivateGuard in AppModule
+  	- implemnent CanComponentDeactivate interface in UsersComponent component
+  		export class UsersComponent implements CanComponentDeactivate
+  	- implement canDeactivate() method:
+  		canDeactivate(): () => Observable<boolean> | Promise<boolean> | boolean {
+  			// imolement the logic to allow to leave or not
+  			if(this.allowEdit) {
+  				return true;
+  			} esle {
+  				return confirm("Do you want to exit, descarding the changes?");
+  			}
+  		}
+
+  . How to pass static date to a route?
+  	- example passe message to errorMessage component
+  		- create a path:
+  		{ path: 'not-found', component: ErrorPageComponent, data: {message: 'Page not found'}},
+  		- inject the route
+  		- set variable:
+  		  this.errorMessage = route.snapshot.data['message']; or:
+  		  route.data.subscribe(
+  		  	(data: Data) => {
+  		  		this.errorMessage = data['message'];
+  		  	}
+  		  )
+
+  . How to pass dynamic date to a route?
+  	run some code, before a route is rendered, doing some pre-loading instead of doing that operation in OnInit.
+  	it will load our data in advance
+  	- Create a class:
+  	interface Server {
+  		id: number;
+  		name: string;
+  		status: string;
+  	}
+
+  	@Injectable
+  	export class SolverResolver  implements Resolver<Server> {
+  		constructor(serverService: ServerService) {}
+  		resolve(route: RouteSnaphshot, state: RouterStateSnapshot): Observable<Server> | Promise<<Server> | Server> {
+  			return serverService.getServer(+route.params['id']);
+  		}
+  	}
+
+  	- Add SolverResolver to providers in AppModule
+  	- Add SolverResolver to router module:
+  		{ path: ':id/edit', component: EditServerComponent, resolve: {server: SolverResolver}} //server is can be any string we want (f.ex, could be receiver)
+  		-> map the data that resolver gives back, and that data will be stored in 'server':
+  			route.data.subscribe(data: Data) => {
+  				this.server = data['server'];
+  			}
+
+
+OBSERVABLE:
+
+	. What are observables?
+		Can be considered a data store
+		Imported from an thyrdparty library - RxJs
+		Observable and Observer (between them we have a stream, where we have multiple events emmite by the observable, for example can be connected to http requests)
+
+	. In the Observer how can you handle data package?
+		We can handle data, handle error or habdle completion
+		route.params.subscribe(
+  			(params: Params) => {
+  				user.id = params['id'];
+  				user.name = params['name'];
+  			}
+  		)  ---> params is an observable, the stream of data that gives us new values
+
+  	. How do we store an on observable?
+  		Store it in a Subsription:
+  			private subscription: Subscription;
+  			subscription = interval(1000).subscribe(
+  				count => {
+  					console.log();
+  				}
+  			);
+  			- In onDestroy, we can unsibsribe the subcription, preventing memory leaks
+
+  	. How can you create a custom observable?
+  		const customObservable = Observable.create(observer => {
+  			let count = 0;
+  			setInterval(() => {
+  				observer.next(count); //  emit a new value
+  				count ++;
+  			}, 1000);
+  		});
+
+  		customObservable.subscribe(data => {
+  			console.log(data);
+  		})
+
+  	. How to pass an error to an Observable?
+  		this.subscription = customObservable.subscribe(data => {
+  			console.log(data);
+  		}, error => {
+  			console.log(error);
+  			alert(error.message);
+  		})
+
+  	. How to complete an Observable?  
+  		in this case, the observable is done, does not emit any more values
+  		const customObservable = Observable.create(observer => {
+  			let count = 0;
+  			setInterval(() => {
+  				if(count === 2) {
+  					observer.complete();
+  				}
+  				observer.next(count); //  emit a new value
+  				count ++;
+  			}, 1000);
+  		});
+
+  		this.subscription = customObservable.subscribe(data => {
+  			console.log(data);
+  		}, error => {
+  			console.log(error);
+  			alert(error.message);
+  		}, () => {
+  			console.log('Completed');
+  		})
+
+  	. How to use operators over Observables? What are they used for?
+  		they build a chain of steps we want to pass our observable through
+  		using map operator:
+  		this.subscription = customObservable.pipe(map((data: number) => {
+  			return 'Round: ' + data + 1;
+  		})).subscribe(data => {
+  			console.log(data);
+  		}, error => {
+  			console.log(error);
+  			alert(error.message);
+  		}, () => {
+  			console.log('Completed');
+  		})
+
+  		using filter operator:
+  		this.subscription = customObservable.pipe(filter(data = {
+  			return data === 0;
+  		}), map((data: number) => {
+  			return 'Round: ' + data + 1;
+  		})).subscribe(data => {
+  			console.log(data);
+  		}, error => {
+  			console.log(error);
+  			alert(error.message);
+  		}, () => {
+  			console.log('Completed');
+  		})
+
+  	. What are subjects? How to replace an EventEmitter
+  		activatedEmitter = new EventEmitter<boolean>();
+  		nActivate() {
+  			activatedEmitter.emit(true);
+  		}
+
+  		activatedEmitter.subscribe(activate => {
+  			this.activate = activate;
+  		});
+
+  		activatedEmitter = new Subject<boolean>();
+  		nActivate() {
+  			activatedEmitter.next(true);
+  		}
+
+ 
+ FORMS
+ 	. What are the approaches to handle form in angular?
+ 		- Template driven approach - setup the form in the template, and angular will infer the structure of the form, which controls the form has. Has a more complex approach.
+ 		- Reactive approach - created programmatically and synchronized with the DOM, and with great controllers, we can fine tune every peace about the form
+
+ 	Template driven:
+	 	. How to configure Forms in angular (Template driven)?
+	 		- add FormModule to imports in @NgModule, in AppModule
+	 		- tell angular what is the controller for the form:
+	 			<form (onSubmit)="onSubmit()">
+	 				<div id="user-data">
+	 					<div class="form-group">
+	 						<lavel for="username">Username</label>
+	 						<input 
+	 							type="text"
+	 							id="username"
+	 							class="form-control"
+	 							ngModel  ---> tells angular that this input is actually a controller
+	 							name="username" ---> represents the control
+	 						>
+	 					</div>
+	 				</div>
+	 			</form>
+
+	 		- add method onSubmit() in the component
+	 			- to configure this method in the form, we add an event to the form: <form (onSubmit)="onSubmit()">
+	 				- this event will be fired whenever this form is submited
+	 			- to access the form in the componenet, we add a local reference: #f="ngForm":
+	 				<form (onSubmit)="onSubmit(f)" #f="ngForm">
+	 				onSubmit(form: NgForm)
+	 	. How to access the form using a @ViewChild
+	 		- add @ViewChild to the component:
+	 			@ViewChild('f') sugnupForm: NgForm;
+
+	 	. How to add validators to to check user input?
+	 		- in TD, we add them to the template:
+	 			<input 
+					type="text"
+					id="username"
+					class="form-control"
+					ngModel  ---> tells angular that this input is actually a controller
+					name="username" ---> represents the control
+					required  ---> angular detect default htlm attribute and add it
+					email ---> validates email format
+				>
+		. How can we take advantage of the validators to disable some elements?
+			<button>
+				class="btn btn-primary"
+				type="submit"
+				[disabled]="!f.isValid">Submit</button>
+
+			- in css file, we can define styling for invalid components:
+				input.ng-invalid {
+					border: 1px solid red;
+				}
+
+		. How to add notification dedicated to a specific element:
+			- add a local reference to the element:
+				<input 
+					type="text"
+					id="username"
+					class="form-control"
+					ngModel  ---> tells angular that this input is actually a controller
+					name="username" ---> represents the control
+					required  ---> angular detect default htlm attribute and add it
+					email ---> validates email format
+					#email="ngModel"
+				<span class="help-block" *ngIf="!email.valid" && email.touched>Please add a valid email</span>
+				>
+
+		. How to add default values to Elements:
+			- use two way property binding with ngModel: [ngModel]="defaultQuestion"
+				- in controller, define defaultQuestion="pet"
+				<select 
+					id="username"
+					class="form-control"
+					[ngModel]="defaultQuestion"  ---> tells angular that this input is actually a controller
+					name="secret"
+					<option value="pet">Your first pet</option>
+					<option value="teacher">Your first teacher</option>
+				>
+
+		. How to configure Template Driven form to handle two way data binding?
+			<div class="form-group">
+				<textares 
+					name="questionAnsuer" 
+					rows="10"
+					class="form-control"
+					[(ngModel)]="answer">
+				</textarea>
+			</div>
+			<p>Your reply: {{ answer }}</p>
+
+		. How to group elements in a form (for ex: username and password)?
+			ngModelGroup="userData"  --> "userData" is the name for the group
+			- with this group, we have an other element in the form, which can be used to control validity (for ex)
+
+				<form (onSubmit)="onSubmit()">
+		 				<div id="user-data" ngModelGroup="userData">
+		 					<div class="form-group">
+		 					</div>
+		 				</div>
+		 		</form>
+
+		 		- to get access to the javascript obeject, we can add a local reference to it:
+		 			<form (onSubmit)="onSubmit()">
+		 				<div 
+		 					id="user-data" 
+		 					ngModelGroup="userData"
+		 					#userData="ngModelGroup">
+		 					
+		 					<div class="form-group">
+		 					</div>
+	 					</div>
+	 				</form>
+
+	 				with this local reference, we can access group data and for example, output a message alerting if the group is not valid:
+	 				<p *ngId="!userData.valid" && userData="touched">User data is invalid!</p>
+
+	 	. How to add a radio button in the form?
+	 		 - add a gender to the component:
+	 		 	genders = ['male', 'female'];
+	 		 - in the emplate, add radio element.
+	 		 	<div class="radio" *ngFor="let g of genders">
+	 		 		<label	class="">
+	 		 			<input type="radio"
+	 		 			name="gender"
+	 		 			ngModel
+	 		 			[value]="gender"  --> preset it with gender to the value
+	 		 			>
+	 		 			{{ gender }} --> to output a text
+	 		 		</label>
+	 		 	</div>
+
+	 		. How to set upfront a value to the form?
+	 			-first approach:
+		 			- in the component:
+		 				this.signupForm.setValue({
+		 					userData:{
+		 						userName: suggestedName,
+		 						email: ''
+		 					},
+		 					secret: 'pet',
+		 					questionAnswer: '',
+		 					gender: 'male'
+		 				});
+		 		- second approach:
+		 			-> with this method, we can pass a js object, where we override specific controls
+		 			this.signupForm.form.patchValue({
+		 				userData: {
+		 					useraName: suggestedName  ---> In this case, I will patch only userName.
+		 				}
+		 			});
+
+		 	. How to use form data in the template?
+		 		- in the component, add the following js object:
+		 			user = {
+		 				userName: ''
+		 				email: ''
+		 				secretQuestion: ''
+		 			}
+		 		onSubmit() {
+		 			submitted = true;
+		 			this.user.username = this.signupForm.value.username;
+		 			this.user.email = this.signupForm.value.email;
+		 			this.user.secretQuestion = this.signupForm.value.secretQuestion;
+		 		}
+
+		 		<div class="row" *ngIf="submitted">
+		 			<div class="col-xs-12">
+		 				<h3>Your data: </h3>
+		 				<p>Username: {{ user.username }}</p>
+		 				<p>Mail: {{ user.email }}</p>
+		 				<p>Secret Question: {{ user.secretQuestion }}</p>
+		 			</div>	
+		 		</div>
+
+		 	. How to reset the form?
+		 		- in the component:
+		 			onSubmit() {
+		 				...
+		 				this.signupForm.reset();
+		 			}
+
+		
+
+		Reactive Driven:   (simpler) - the form is not configured in the html form, but in the component FormGroup
+
+			. How to setup a reactive driven form:
+				- in the component:
+					genders = ['male', 'female'];
+					signupForm : FormGroup;
+				- in AppModule, we don't need the FormsModule anymore (only for Template Forms)
+					instead, we need to add ReactiveFormsModule to imports in AppModule
+
+				onInit() {
+					// before, create the form in the template (html)
+					this.signupForm = new FormGroup({   ---> we have to pass a js object, and that is all
+						//here we pass the controls as key-value pairs
+						'username': nre FormControl(null), ---> form control, with the initial state / value (1st arg), 2nd arg is an array of validators
+						'email': nre FormControl(null),
+						'gender': nre FormControl('male'),
+					}); 
+
+				}
+
+			. How to syn this form to the html form (in template)?
+				- we need to add the first directive:
+					<form [formGroup]="signupForm"> --> tells angular to use my form group in the component
+						<div id="user-data">
+		 					<div class="form-group">
+		 						<lavel for="username">Username</label>
+		 						<input 
+		 							type="text"
+		 							id="username"
+		 							formControlName="username"  --> name of the control in the component (typescript)
+		 							//[formControlName]="'username'"  --> using property binding  
+		 							class="form-control"
+		 						>
+		 					</div>
+	 					<div class="radio" *ngFor="let g of genders">
+			 		 		<label	class="">
+			 		 			<input 
+				 		 			type="radio"
+				 		 			formControl="gender"
+				 		 			[value]="gender"  --> preset it with gender to the value
+			 		 			>
+			 		 			{{ gender }} --> to output a text
+			 		 		</label>
+	 		 			</div>
+	 				</div>
+					</form>
+
+			. How to submit a reactive form?
+				- add submit conf to the form:
+					<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+				- add the method to the component:
+				onSubmit() {
+					console.log(signupForm);
+				}
+
+			. How to add validator to reactive form?
+				- to add required validator to the controller:
+					this.signupForm = new FormGroup({   ---> we have to pass a js object, and that is all
+						//here we pass the controls as key-value pairs
+						'username': new FormControl(null, Validatoes.required)
+						'email': nre FormControl(null, [Validatoes.required, Validatoes.email]),
+						'gender': nre FormControl('male'),
+					});
+
+			. How to get acces to the controls and display data?
+						<div class="form-group">
+		 						<lavel for="username">Username</label>
+		 						<input 
+		 							type="text"
+		 							id="username"
+		 							formControlName="username"  --> name of the control in the component (typescript)
+		 							//[formControlName]="'username'"  --> using property binding  
+		 							class="form-control"
+		 						>
+		 						<span
+		 							*ngIf="signupForm.get('username').valid && "signupForm.get('username').touched" ---> get the control (in this case, username)
+		 							class="help-block">Please enter a valid username!
+		 						</span>
+		 					</div>
+	 					<div class="
+
+	 		. How to group controls using reactive approach?
+	 			this.signupForm = new FormGroup({   
+	 					'userData': new FormGroup({
+	 						'username': nre FormControl(null, Validatoes.required),
+							'email': new FormControl(null, [Validatoes.required, Validatoes.email]),
+	 					}),
+						'gender': nre FormControl('male'),
+					});
+
+				- to get and display the group in the form:
+					<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+						<div formGroupName="userData">
+							<div class="form-group">
+		 						<lavel for="username">Username</label>
+		 						<input 
+		 							type="text"
+		 							id="username"
+		 							formControlName="userData.username"  --> name of the control in the component (typescript)
+		 							//[formControlName]="'username'"  --> using property binding  
+		 							class="form-control"
+		 						>
+		 						<span
+		 							*ngIf="signupForm.get('userData.username').valid && "signupForm.get('userData.username').touched" ---> get the control (in this case, username)
+		 							class="help-block">Please enter a valid username!
+		 						</span>
+		 					</div>
+					</form>
+
+			. How to add form controls dinamicaly (using arrays)?
+				<div>
+					<h4>Your hobbies</h4>
+					<button class="btn btn-default" type="button" (click)="onAddHobby()">Add hobby</button>
+				</div>
+				- in the componenet, add the method:
+					this.signupForm = new FormGroup({   
+	 					'userData': new FormGroup({
+	 						'username': nre FormControl(null, Validatoes.required),
+							'email': new FormControl(null, [Validatoes.required, Validatoes.email]),
+	 					}),
+						'gender': new FormControl('male'),
+						'hobbies': new FormArray([])
+					});
+
+					onAddHobby() {
+						this.signupForm.get('hobbies');
+						const control = new FormControl(null, Validators.required)
+						(<FormArray>this.signupForm.get('hobbies').push(control);
+					}
+
+				- to show this new controls in the html template:
+					<div formArrayName="hobbies">
+						<div>
+							<h4>Your hobbies</h4>
+							<button class="btn btn-default" type="button" (click)="onAddHobby()">Add hobby</button>
+							<div class="form-group">
+								*ngFor="let hobbyControl of signupForm.get('hobbies').controls; let i = index"
+								<input type="text" class="form-control" [formControlName]="i">
+							</div>
+						</div>
+					</div>
+
+			. How to create custom validators? (for ex create a set of usernames not allowd to be used)
+				forbiddenUsernames = ['Chris', 'Anna'];
+				- create validator
+					// this method returns a key value pair array (ex: {john: true	})
+					forbiddenNames(control: FormControl): {[s: string]: boolean} {
+						if(this.forbiddenUsernames.indexOf(control.value) !== -1) { -->  check if it is contained in the forbidden array
+
+							return {'nameIsForbidden': true};
+						}
+						return null; --> returns null if it does not match
+					}
+
+				- add this validator to form configuration:
+					this.signupForm = new FormGroup({   
+	 					'userData': new FormGroup({
+	 						'username': new FormControl(null, [Validatoes.required, this.forbiddenNames.bind(this)]),  --> the binding is because "this" is not refering to this class, but for angular when it calls the validators
+							'email': new FormControl(null, [Validatoes.required, Validatoes.email]),
+	 					}),
+						'gender': new FormControl('male'),
+						'hobbies': new FormArray([])
+					});
+
+			. How to use eerror codes from custrom validator?
+
+				<div class="form-group">
+		 						<lavel for="username">Username</label>
+		 						<input 
+		 							type="text"
+		 							id="username"
+		 							formControlName="userData.username"  --> name of the control in the component (typescript)
+		 							//[formControlName]="'username'"  --> using property binding  
+		 							class="form-control"
+		 						>
+		 						<span
+		 							*ngIf="signupForm.get('userData.username').valid && "signupForm.get('userData.username').touched" 
+		 							class="help-block">
+										<span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">Tis name is invalid</span>
+
+			 							Please enter a valid username!</span>
+			 							<span *ngIf="signupForm.get('userData.username').errors['required']">Tis field is required</span>
+		 						</span>
+		 					</div>
+
+		 	. How to create an async validator (imagine a validator from outside the app)?
+		 		- create validator
+		 			forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
+		 				const promise = new Promise<any>((resolve, reject) => {
+		 					setTimeout(() => {
+		 						if(control.value === 'test@test.com') {
+		 							resolve({'emailIsForbidden': true});
+		 						} esle {
+		 							resolve(null);
+		 						}
+		 					}, 1500);
+		 				});
+		 				return promise;
+		 			}
+
+		 		- add it to email validators, passed as an async validator (3rd arg of FormControl):
+		 			this.signupForm = new FormGroup({   
+	 					'userData': new FormGroup({
+	 						'username': nre FormControl(null, Validatoes.required),
+							'email': new FormControl(null, [Validatoes.required, Validatoes.email], this.forbiddenEmails,
+	 					}),  -->
+						'gender': new FormControl('male'),
+						'hobbies': new FormArray([])
+					});
+
+			. How to react to status value changes?
+				- there a track of form state that we can track
+					ngOnInit() {
+						this.signupForm.valueChanges.subscribe(
+							(value) => console.log(value);
+						);
+					}
+
+				- to track status changes:
+					ngOnInit() {
+						this.signupForm.statusChanges.subscribe(
+							(status) => console.log(status);
+						);
+					}
+
+			. How to listen for updates in the form?
+				- if we want to set the form
+					this.signupForm.setValue({
+						'userData': {
+							'username': 'Lelis',
+							'email': ''lelis@test.com,
+							'gender': 'Male',
+							'hobbies': []
+						}
+					});
+				- if we want to patch the form with only username
+					this.signupForm.setValue({
+						'userData': {
+							'username': 'Cuca'
+						}
+					});
+
+
+
+PIPES:
+	
+	. What are pipes?
+		- Thy are a feature built into Angular 2 which allows to transform output in the template. A good place to use them is in the html template
+			ex:
+				username = "Lelis"
+				<p>{{ username }}</p>
+
+				To show username all in uppercase, we can use a pipe (uppercase pipe):
+
+					<p>{{ username | uppercase }}</p>
+
+	. How to parameterize a pipe?
+		{{ server.started | date:'fullDate' }} --> fullDate e a date format that we configured
+
+	. Where to learn more about pipes:
+		- official documentation (docs -> api -> search for pipes)
+
+	. How to combine pipes?
+		{{ server.started | date:'fullDate' | uppercase }} --> put everything in uppercase
+
+	. How to create a custom pipe?
+		- create a new file -> to create a pipe to shorten the name
+
+		  @Pipe({
+		  	name: 'shorten'
+		  })
+		  export class ShortenPipe implements  PipeTransform {
+		  	transform(value: any, limit: number) {
+		  		if(value.length > limit) {
+		  			return value.substr(0, limit) + '...';
+		  		}
+		  	}
+		  	return value;
+		  }
+
+		 - add the ShortenPipe to declarations, in AppModule
+		 - in the template:
+		 	{{ server.started | shorten: 10 }}
+
+	. How to create a filter pipe?
+		- we want to filter by a given text inserted
+			<input type="text" [(ngModel)]="filteredStatus">
+		- in the component:
+			filteredStatus = '';
+		- create a filter pipe:
+
+			@Pipe({
+		  		name: 'filter'
+		  	})
+			export class FilterPipe implements  PipeTransform {
+		  	transform(value: any, filterString: string, propName: string): any {
+		  		if(value.length === 0) {
+		  			return value;
+		  		}
+		  		const  resultArray= [];
+		  		for(const item of value) {
+		  			if(item[propName] === filterString) {
+		  				resultArray.push(item);
+		  			}
+		  		}
+		  		return resultArray;
+		  	}
+		  	return value;
+
+		- add the ShortenPipe to declarations, in AppModule
+		- in the template:
+		 	*ngFor="let server of servers | filter:filteredStatus:'status'"  --> 'status' is the property I want to seaarch for
+
+
+	. How to force the filter to be rendered again, after changing teh filtered data?
+		- define the filter as a Pure filter:
+			@Pipe({
+		  		name: 'filter',
+		  		pure: false  ---> by default is is true ** this can lead to performance issues
+		  	})
+			export class FilterPipe implements  PipeTransform {
+		  
+	. How to create async pipe?
+		appStatus = new Promise((resolve, reject) => {
+			setTimeout(() => {
+				resolve('stable');   ---> set appStatus to status, after 2sec
+			}, 2000)
+		})
+
+		- in the template:
+			<h2>{{ App status: {{ appStatus }} }}</h2>  --> appStatus is an object which will be transformed in a string. How to make angular aware of this?
+				- create a pipe:
+					<h2>{{ App status: {{ appStatus | async }} }}</h2>  --> async recognizes that this is a promise and as aside note, it will work observable too, and after 2 sec it recognises that comething changed and will reflect the updated data
+
+
+HTTP REQUESTS:
+
+	. How to send a POST:
+			- inject http: HttpClient
+			onCreate(postData: { title: string; content: string }) {
+				this.http.post("https://ng-store/posts.json", postData);  -> HttpClient will convert postData into json.
+			}
+
+			- Post will return an observable, and if nobody is interested in the response, the reques will not be sent, so we need to subscribe it (--> will extract the response data and return it):
+				onCreate(postData: { title: string; content: string }) {
+					this.http.post("https://ng-store/posts.json", postData);
+				}.subscribe(responseData => {  
+					console.log(responseData);
+				})
+
+	. How to do a GET:
+
+			fetchPosts(postData: { title: string; content: string }) {
+					this.http.post("https://ng-store/posts.json");
+				}.subscribe(responseData => {  
+					console.log(responseData);
+				});
+
+	. How to transform response data?
+		- use observable operators:
+			export interface Post {  --> this is the same object we used in the post operation
+				title: string; 
+				content: string
+				id?: string
+			}
+
+			fetchPosts() {
+				this.http.get<{[key: string]}, Post)>("https://ng-store/posts.json");
+					}.pipe(map((responseData => {
+						const postArray: Post[] = [];
+						for(const key in responseData) {
+							if(responseData.hasOwnPoperty[key]) {
+								postArray.push({...responseData[key], id: key});
+							}
+						}
+						return postArray;
+					}))
+					.subscribe(posts => {  
+						console.log(posts);
+					});
+
+	. How to send a delete?
+		deletePosts() {
+			http.delete("https://ng-store/posts.json);
+		}
+
+	. How to handle errors?
+		error = null;
+		this.postService.fetchPosts().subscribe(posts => {
+			this.fetching = true;
+		}, error => {
+			this.error = error.message;
+		});
+
+	. How to use subject to handle errors?
+		error = new Subject<string>();
+		this.postService.fetchPosts().subscribe(posts => {
+			this.fetching = true;
+		}, error => {
+			this.error.next(error.message);
+		});
+
+		- subsribing to the subject:
+			this.postService.error.subscibe(errorMessage => {
+				this.error = errorMessage;
+			});
+
+	. How to use catch error operator?
+		- import throwError from rxjs
+		this.http.get<{[key: string]}, Post)>("https://ng-store/posts.json");
+					}.pipe(map((responseData => {
+						const postArray: Post[] = [];
+						for(const key in responseData) {
+							if(responseData.hasOwnPoperty[key]) {
+								postArray.push({...responseData[key], id: key});
+							}
+						}
+						return postArray;
+					}), catchError(errorRes => {
+						//Send to analitic server
+						return throwError(errorRes);  --> need ro retun the observable
+					}));
+					
+	. How to send headers?
+		- there is an extra last argument in the http methods where we can pass a header:
+		this.http.get<{[key: string]}, Post)>("https://ng-store/posts.json", 
+			{
+				headers: new HTTPHeader({"Custom-Header": 'Hello' })
+			}
+		);
+
+	. How to send query parameters?
+		- there is an extra last argument in the http methods where we can pass a header:
+			this.http.get<{[key: string]}, Post)>("https://ng-store/posts.json", 
+				{
+					headers: new HttpHeader({"Custom-Header": 'Hello' }),
+					params: new HttpParams.set('print', 'pretty')
+				}
+			);
+
+		- add params dinamicaly:
+			let searchParams = new HttpParams();
+			searchParams.append('print', 'pretty');
+			this.http.get<{[key: string]}, Post)>("https://ng-store/posts.json", 
+				{
+					headers: new HttpHeader({"Custom-Header": 'Hello' }),
+					params: searchParams
+				}
+			);
+
+
+	. How to get specific parts of the response (headers, full response, etc)?
+				this.http.post<{[key: string]}, Post>("https://ng-store/posts.json", 
+					postData,
+					{
+						observe: 'response'  --> returns the full response
+					}
+				)
+
+				- in the delete operation:
+					http.delete("https://ng-store/posts.json,
+						{
+						observe: 'events' --> 
+						}
+					).pipe(tap(event => {  --> does not interrupt the flow of data, just tap the entries
+						console.log(event);
+						if(event.type === HttpEventType.Sent) {
+							console.log("the request was sent");
+						}
+						if(event.type === HttpEventType.Response) {
+							console.log(event.body);
+						}
+					}));
+
+	. How to change response body type?
+				http.delete("https://ng-store/posts.json,
+						{
+							observe: 'events',
+							responseType: 'json'  --> tells angular to transform the response into json format
+							//responseType: 'text'
+							//responseType: 'blob'
+						}
+					).pipe(tap(event => {  --> does not interrupt the flow of data, just tap the entries
+						console.log(event);
+						if(event.type === HttpEventType.Sent) {
+							console.log("the request was sent");
+						}
+						if(event.type === HttpEventType.Response) {
+							console.log(event.body);
+						}
+					}));
+
+	. How to setup interceptors?
+		export class AuthInterceptorService implements HttpInterceptor {
+			intercept(req: HttpRequest<any>, next: HttpHandler) {  --> next will let the request continue its journey
+				console.log('Request is on its way.');
+				return next.handle(req); --> let the request continue.
+			}
+		}
+
+ 		- in th AppModule, add HttpInterceptor to the providers array:
+ 			providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}]   -> multi allows to have multiple services under the identifier HTTP_INTERCEPTORS
+
+ 	. How to modify the request?
+ 		export class AuthInterceptorService implements HttpInterceptor {
+			intercept(req: HttpRequest<any>, next: HttpHandler) {
+				console.log('Request is on its way.');
+				const modifiReq = req.clone({headers: req.headers.append('Auth', 'xyz')});
+				return next.handle(modifiReq);
+			}
+		}
+
+	. How to interact with the response?
+		export class AuthInterceptorService implements HttpInterceptor {
+			intercept(req: HttpRequest<any>, next: HttpHandler) {
+				console.log('Request is on its way.');
+				return next.handle(req).pipe(tap(event => {
+					if(event.type === HttpEventType.Response) {
+						console.log('Response arrived: ');
+						console.log(event.body);
+						// Here we could change the response if we wanted to
+					}
+				}));
+			}
+		}
+
+	. How to setup multiple interceptors?
+		export class LogginInterceptorService implements HttpInterceptor {
+			ntercept(req: HttpRequest<any>, next: HttpHandler) {
+				return next.handle();
+			}
+		}
+
+
+
+
+
+
+NgRx:
+
+    Manages the application state using NgStore - State management
+
+    What is state?
+      Every data, information that controls what can be displayed in the screen, is a state.
+
+    What is Redux?
+      It is a state management pattern (it is a also a library with that pattern) in one center Store (single source of truth)
+
+      Actions - used to change the state. An action has an Identifier and a Payload. Action reach a reducer
+      Reducer - a javascript function that gets the current state (stored in the store) and the action as input (passed by reduc library).
+                in the reducer we can look at the action's identifier (to know which action it is) and then perform code in the state (got from input) to update the state in a immutable way (copying it and changing the copy). In hte end, the reducer returns a new state, which is forwarded to the app store, overriding the old state of the app. Reducer only executes synchronous code.
+
+        NgRx is an angular implementation of Redux.
+      Effects - Used, in order to habdle side effects with asyncronous calls
+
+
+
+
+		- Add it to AppModule  - the order is important, it will call them in the same order we have them in AppModule
+
+ . What do you know about web sockets?
+
+ . How to implement an API handling in Angular?
+ 		http requests
+
+
+
